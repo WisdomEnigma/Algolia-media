@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+
+package protos;
+
+
+
+message Credentials{
+
+    string Algolia_AMI = 1;
+    string APP_Code = 2;
+}
+
+
+enum ImageType {
+    FILE = 0;
+    IMAGE = 1;
+    URL = 2;
+}
