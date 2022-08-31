@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 
 	"github.com/wisdomenigma/algolia-media/algolia_wrapper"
@@ -15,10 +15,6 @@ func main() {
 		return
 	}
 
-	if err := file.Close(); err != nil {
-		return
-	}
-
 	wrapper := algolia_wrapper.NewAlgolia_Object(file)
 
 	client := wrapper.ToConnectAlgolia(&protos.Credentials{
@@ -27,10 +23,30 @@ func main() {
 	})
 
 	index := wrapper.Index(client, []string{"MyAvatar"}...)
-	object, _ := wrapper.Put(index)
+	object, err := wrapper.Put(index)
+	if err != nil {
+		log.Println("Error putting image:", err)
+		return
+	}
 
-	fmt.Println("Success : ", object)
-	// if err = wrapper.Get(index, object.ObjectID); err != nil {
-	// 	log.Fatalln("Object is not found")
-	// }
+	result, err := wrapper.Query(index, object, []string{"MyAvatar"}...)
+	if err != nil {
+		log.Println("Error finding image :", err)
+		return
+	}
+
+	log.Println("Result:", result.Query)
+
+	resultSet, _, err := wrapper.Get(index, object)
+	if err != nil {
+		log.Println("Error getting image:", err)
+		return
+	}
+
+	log.Println("Result :", resultSet)
+
+	if err = wrapper.Close(); err != nil {
+		return
+	}
+
 }

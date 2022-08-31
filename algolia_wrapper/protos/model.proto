@@ -17,3 +17,9 @@ enum ImageType {
     IMAGE = 1;
     URL = 2;
 }
+
+enum ImageFormatType{
+    JPEG = 0;
+    PNG = 1;
+    GIF = 2;
+}
